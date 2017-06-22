@@ -1,21 +1,3 @@
-/*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
-    
-    written by : http://underscorediscovery.ca
-    written for : http://buildnewgames.com/real-time-multiplayer/
-    
-    MIT Licensed.
-*/
-
-//The main update loop runs on requestAnimationFrame,
-//Which falls back to a setTimeout loop on the server
-//Code below is from Three.js, and sourced from links below
-
-    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-
-    // requestAnimationFrame polyfill by Erik Möller
-    // fixes from Paul Irish and Tino Zijdel
-
 var frame_time = 60/1000; // run the local game at 16ms/ 60hz
 if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 22hz
 

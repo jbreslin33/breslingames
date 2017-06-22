@@ -7,6 +7,8 @@
 
     Usage : node app.js
 */
+require ('mootools');
+
 
     var
         gameport        = process.env.PORT || 4004,
