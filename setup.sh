@@ -11,8 +11,11 @@ sudo npm install express-form --save
 sudo npm install body-parser --save
 sudo npm install formidable@latest --save
 
+
 sudo npm install mootools
 
 sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 
 sudo npm install canvas
+
+sudo npm install node-uuid
