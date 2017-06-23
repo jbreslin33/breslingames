@@ -1,13 +1,8 @@
 
 require ('mootools');
 
-var Ball = new Class(
-{
-        initialize: function()
-        {
-       		console.log('create ball'); 
-	}
-});
+
+Ball = require('./ball.js');
 
 //module.exports = Race;
 
