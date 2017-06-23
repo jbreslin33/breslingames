@@ -1,13 +1,18 @@
-/*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
-    
-    written by : http://underscorediscovery.ca
-    written for : http://buildnewgames.com/real-time-multiplayer/
-    
-    MIT Licensed.
 
-    Usage : node app.js
-*/
 require ('mootools');
+
+var Ball = new Class(
+{
+        initialize: function()
+        {
+       		console.log('create ball'); 
+	}
+});
+
+//module.exports = Race;
+
+ball = new Ball();
+
 
 
     var
