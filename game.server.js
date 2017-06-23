@@ -1,10 +1,3 @@
-/*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
-    
-    written by : http://underscorediscovery.ca
-    written for : http://buildnewgames.com/real-time-multiplayer/
-    
-    MIT Licensed.
-*/
 
     var
         game_server = module.exports = { games : {}, game_count:0 },

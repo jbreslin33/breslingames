@@ -1,13 +1,12 @@
 
 require ('mootools');
 
-
-Ball = require('./ball.js');
-
-//module.exports = Race;
+/*
+var Ball = require('./ball.js');
 
 ball = new Ball();
-
+var game_player = require('./game_player.js');
+*/
 
 
     var
