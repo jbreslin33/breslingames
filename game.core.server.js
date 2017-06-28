@@ -310,8 +310,10 @@ create_physics_simulation: function() {
         A simple class to maintain state of a player on screen,
         as well as to draw that state when required.
 */
-
-    var game_player = function( game_instance, player_instance ) {
+var game_player = new Class(
+{
+initialize: function( game_instance, player_instance ) 
+{
 
             //Store the instance, if any
         this.instance = player_instance;
@@ -350,9 +352,9 @@ create_physics_simulation: function() {
             this.pos = { x:500, y:200 };
         }
 
-    }; //game_player.constructor
+    }, //game_player.constructor
   
-    game_player.prototype.draw = function(){
+    draw: function(){
 
             //Set the color for this player
         game.ctx.fillStyle = this.color;
@@ -364,7 +366,8 @@ create_physics_simulation: function() {
         game.ctx.fillStyle = this.info_color;
         game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
     
-    }; //game_player.draw
+    } //game_player.draw
+});
     
 	// (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
 Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
