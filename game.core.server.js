@@ -90,16 +90,6 @@ game_core.prototype.stop_update = function() {  window.cancelAnimationFrame( thi
 
 
 
-/*
-
- Common functions
- 
-    These functions are shared between client and server, and are generic
-    for the game state. The client functions are client_* and server functions
-    are server_* so these have no prefix.
-
-*/
-
     //Main update loop
 game_core.prototype.update = function(t) {
     
@@ -291,17 +281,6 @@ game_core.prototype.handle_server_input = function(client, input, input_time, in
    player_client.inputs.push({inputs:input, time:input_time, seq:input_seq});
 
 }; //game_core.handle_server_input
-
-
-/*
-
- Client side functions
-
-    These functions below are specific to the client side only,
-    and usually start with client_* to make things clearer.
-
-*/
-
 
 game_core.prototype.create_timer = function(){
     setInterval(function(){
