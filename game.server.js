@@ -5,6 +5,9 @@
     
     MIT Licensed.
 */
+    global.window = global.document = global;
+var game_core = require('./game.core.server');
+
 
     var
         game_server = module.exports = { games : {}, game_count:0 },
@@ -13,7 +16,6 @@
 
         //Since we are sharing code with the browser, we
         //are going to include some values to handle that.
-    global.window = global.document = global;
 
         //Import shared game library code.
     require('./game.core.server.js');

@@ -412,7 +412,4 @@ game_core.prototype.create_physics_simulation = function() {
     
     }; //game_player.draw
 
-//server side we set the 'game_core' class to a global type, so that it can use it anywhere.
-if( 'undefined' != typeof global ) {
-    module.exports = global.game_core = game_core;
-}
+    module.exports = game_core;
