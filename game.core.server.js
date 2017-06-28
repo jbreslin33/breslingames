@@ -64,9 +64,8 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
             height : 480
         };
 
-            //We create a player set, passing them
-            //the game that is running them, as well
-        if(this.server) {
+       	//We create a player set, passing them
+        //the game that is running them, as well
 
             this.players = {
                 self : new game_player(this,this.instance.player_host),
@@ -74,38 +73,6 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
             };
 
            this.players.self.pos = {x:20,y:20};
-
-        } else {
-
-            this.players = {
-                self : new game_player(this),
-                other : new game_player(this)
-            };
-
-                //Debugging ghosts, to help visualise things
-            this.ghosts = {
-                    //Our ghost position on the server
-                server_pos_self : new game_player(this),
-                    //The other players server position as we receive it
-                server_pos_other : new game_player(this),
-                    //The other players ghost destination position (the lerp)
-                pos_other : new game_player(this)
-            };
-
-            this.ghosts.pos_other.state = 'dest_pos';
-
-            this.ghosts.pos_other.info_color = 'rgba(255,255,255,0.1)';
-
-            this.ghosts.server_pos_self.info_color = 'rgba(255,255,255,0.2)';
-            this.ghosts.server_pos_other.info_color = 'rgba(255,255,255,0.2)';
-
-            this.ghosts.server_pos_self.state = 'server_pos';
-            this.ghosts.server_pos_other.state = 'server_pos';
-
-            this.ghosts.server_pos_self.pos = { x:20, y:20 };
-            this.ghosts.pos_other.pos = { x:500, y:200 };
-            this.ghosts.server_pos_other.pos = { x:500, y:200 };
-        }
 
             //The speed at which the clients move.
         this.playerspeed = 120;
