@@ -189,9 +189,6 @@ game_core.prototype.v_mul_scalar = function(a,b) { return {x: (a.x*b).fixed() , 
     //For the server, we need to cancel the setTimeout that the polyfill creates
 game_core.prototype.stop_update = function() {  window.cancelAnimationFrame( this.updateid );  };
     //Simple linear interpolation
-game_core.prototype.lerp = function(p, n, t) { var _t = Number(t); _t = (Math.max(0, Math.min(1, _t))).fixed(); return (p + _t * (n - p)).fixed(); };
-    //Simple linear interpolation between 2 vectors
-game_core.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y, tv.y, t) }; };
 
 
 /*
