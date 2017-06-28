@@ -1,25 +1,4 @@
-/*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
-    
-    written by : http://underscorediscovery.ca
-    written for : http://buildnewgames.com/real-time-multiplayer/
-    
-    MIT Licensed.
-*/
-
-//The main update loop runs on requestAnimationFrame,
-//Which falls back to a setTimeout loop on the server
-//Code below is from Three.js, and sourced from links below
-
-    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-
-    // requestAnimationFrame polyfill by Erik Möller
-    // fixes from Paul Irish and Tino Zijdel
-
-        //Now the main game class. This gets created on
-        //both server and client. Server creates one for
-        //each game that is hosted, and client creates one
-        //for itself to play the game.
+var game_player = require('./game.player');
 
 /* The game_core class */
 
@@ -303,73 +282,7 @@ create_physics_simulation: function() {
 
 });
 
-
-/*
-    The player class
-
-        A simple class to maintain state of a player on screen,
-        as well as to draw that state when required.
-*/
-var game_player = new Class(
-{
-initialize: function( game_instance, player_instance ) 
-{
-
-            //Store the instance, if any
-        this.instance = player_instance;
-        this.game = game_instance;
-
-            //Set up initial values for our state information
-        this.pos = { x:0, y:0 };
-        this.size = { x:16, y:16, hx:8, hy:8 };
-        this.state = 'not-connected';
-        this.color = 'rgba(255,255,255,0.1)';
-        this.info_color = 'rgba(255,255,255,0.1)';
-        this.id = '';
-
-            //These are used in moving us around later
-        this.old_state = {pos:{x:0,y:0}};
-        this.cur_state = {pos:{x:0,y:0}};
-        this.state_time = new Date().getTime();
-
-            //Our local history of inputs
-        this.inputs = [];
-
-            //The world bounds we are confined to
-        this.pos_limits = {
-            x_min: this.size.hx,
-            x_max: this.game.world.width - this.size.hx,
-            y_min: this.size.hy,
-            y_max: this.game.world.height - this.size.hy
-        };
-
-            //The 'host' of a game gets created with a player instance since
-            //the server already knows who they are. If the server starts a game
-            //with only a host, the other player is set up in the 'else' below
-        if(player_instance) {
-            this.pos = { x:20, y:20 };
-        } else {
-            this.pos = { x:500, y:200 };
-        }
-
-    }, //game_player.constructor
-  
-    draw: function(){
-
-            //Set the color for this player
-        game.ctx.fillStyle = this.color;
-
-            //Draw a rectangle for us
-        game.ctx.fillRect(this.pos.x - this.size.hx, this.pos.y - this.size.hy, this.size.x, this.size.y);
-
-            //Draw a status update
-        game.ctx.fillStyle = this.info_color;
-        game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
-    
-    } //game_player.draw
-});
-    
 	// (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
 Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
 
-    module.exports = game_core;
+module.exports = game_core;
