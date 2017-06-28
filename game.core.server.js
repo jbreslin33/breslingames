@@ -145,11 +145,7 @@ game_core.prototype.update = function(t) {
     this.lastframetime = t;
 
         //Update the game specifics
-    if(!this.server) {
-        this.client_update();
-    } else {
         this.server_update();
-    }
 
         //schedule the next update
     this.updateid = window.requestAnimationFrame( this.update.bind(this), this.viewport );
