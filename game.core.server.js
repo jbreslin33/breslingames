@@ -78,8 +78,6 @@
 
 */
 
-    // (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
-Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
     //copies a 2d vector like object from one to another
 game_core.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
     //Add a 2d vector with another one and return the resulting vector
@@ -362,5 +360,8 @@ game_core.prototype.create_physics_simulation = function() {
         game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
     
     }; //game_player.draw
+    
+	// (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
+Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
 
     module.exports = game_core;
