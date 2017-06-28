@@ -82,7 +82,7 @@ require ('mootools');
         //Enter the game server code. The game server handles
         //client connections looking for a game, creating games,
         //leaving games, joining games and ending games when they leave.
-    lobby = require('./lobby.js');
+    server = require('./server.js');
 
         //Socket.io will call this function when a client connects,
         //So we can send that client looking for a game to play,
@@ -100,17 +100,17 @@ require ('mootools');
 
             //now we can find them a game to play with someone.
             //if no game exists with someone waiting, they create one and wait.
-        lobby.findGame(client);
+        server.findGame(client);
 
             //Useful to know when someone connects
         console.log('\t socket.io:: player ' + client.userid + ' connected');
         
 
             //Now we want to handle some of the messages that clients will send.
-            //They send messages here, and we send them to the lobby to handle.
+            //They send messages here, and we send them to the server to handle.
         client.on('message', function(m) {
 
-            lobby.onMessage(client, m);
+            server.onMessage(client, m);
 
         }); //client.on message
 
@@ -122,12 +122,12 @@ require ('mootools');
                 //Useful to know when soomeone disconnects
             console.log('\t socket.io:: client disconnected ' + client.userid + ' ' + client.game_id);
             
-                //If the client was in a game, set by lobby.findGame,
+                //If the client was in a game, set by server.findGame,
                 //we can tell the game server to update that game state.
             if(client.game && client.game.id) {
 
                 //player leaving a game should destroy that game
-                lobby.endGame(client.game.id, client.userid);
+                server.endGame(client.game.id, client.userid);
 
             } //client.game_id
 
