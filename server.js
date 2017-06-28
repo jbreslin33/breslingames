@@ -47,7 +47,7 @@ var ServerGame = require('./server.game');
         //are going to include some values to handle that.
 
         //Import shared game library code.
-    require('./server.game.js');
+    //require('./server.game.js');
 
         //A simple wrapper for logging so we can toggle it,
         //and augment it for clarity.
