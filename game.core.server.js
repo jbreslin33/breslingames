@@ -92,41 +92,8 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
             //Start a fast paced timer for measuring time easier
         this.create_timer();
 
-            //Client specific initialisation
-        if(!this.server) {
-            
-                //Create a keyboard handler
-            this.keyboard = new THREEx.KeyboardState();
-
-                //Create the default configuration settings
-            this.client_create_configuration();
-
-                //A list of recent server updates we interpolate across
-                //This is the buffer that is the driving factor for our networking
-            this.server_updates = [];
-
-                //Connect to the socket.io server!
-            this.client_connect_to_server();
-
-                //We start pinging the server to determine latency
-            this.client_create_ping_timer();
-
-                //Set their colors from the storage or locally
-            this.color = localStorage.getItem('color') || '#cc8822' ;
-            localStorage.setItem('color', this.color);
-            this.players.self.color = this.color;
-
-                //Make this only if requested
-            if(String(window.location).indexOf('debug') != -1) {
-                this.client_create_debug_gui();
-            }
-
-        } else { //if !server
-
             this.server_time = 0;
             this.laststate = {};
-
-        }
 
     }; //game_core.constructor
 
