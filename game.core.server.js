@@ -117,12 +117,6 @@ game_core.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
     //Add a 2d vector with another one and return the resulting vector
 game_core.prototype.v_add = function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; };
     //Subtract a 2d vector with another one and return the resulting vector
-game_core.prototype.v_sub = function(a,b) { return { x:(a.x-b.x).fixed(),y:(a.y-b.y).fixed() }; };
-    //Multiply a 2d vector with a scalar value and return the resulting vector
-game_core.prototype.v_mul_scalar = function(a,b) { return {x: (a.x*b).fixed() , y:(a.y*b).fixed() }; };
-    //For the server, we need to cancel the setTimeout that the polyfill creates
-game_core.prototype.stop_update = function() {  window.cancelAnimationFrame( this.updateid );  };
-    //Simple linear interpolation
 
 
 /*
