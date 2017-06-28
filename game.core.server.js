@@ -23,7 +23,10 @@
 
 /* The game_core class */
 
-    var game_core = function(game_instance){
+var game_core = new Class(
+{
+initialize: function(game_instance)
+{
 
             //Store the instance, if any
         this.instance = game_instance;
@@ -67,7 +70,7 @@
             this.server_time = 0;
             this.laststate = {};
 
-    }; //game_core.constructor
+    }, //game_core.constructor
 
 
 /*
@@ -79,17 +82,17 @@
 */
 
     //copies a 2d vector like object from one to another
-game_core.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
+pos: function(a) { return {x:a.x,y:a.y}; },
     //Add a 2d vector with another one and return the resulting vector
-game_core.prototype.v_add = function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; };
+v_add: function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; },
     //Subtract a 2d vector with another one and return the resulting vector
    //For the server, we need to cancel the setTimeout that the polyfill creates
-game_core.prototype.stop_update = function() {  window.cancelAnimationFrame( this.updateid );  };
+stop_update: function() {  window.cancelAnimationFrame( this.updateid );  },
 
 
 
     //Main update loop
-game_core.prototype.update = function(t) {
+update: function(t) {
     
         //Work out the delta time
     this.dt = this.lastframetime ? ( (t - this.lastframetime)/1000.0).fixed() : 0.016;
@@ -103,14 +106,14 @@ game_core.prototype.update = function(t) {
         //schedule the next update
     this.updateid = window.requestAnimationFrame( this.update.bind(this), this.viewport );
 
-}; //game_core.update
+}, //game_core.update
 
 
 /*
     Shared between server and client.
     In this example, `item` is always of type game_player.
 */
-game_core.prototype.check_collision = function( item ) {
+check_collision: function( item ) {
 
         //Left wall.
     if(item.pos.x <= item.pos_limits.x_min) {
@@ -136,10 +139,10 @@ game_core.prototype.check_collision = function( item ) {
     item.pos.x = item.pos.x.fixed(4);
     item.pos.y = item.pos.y.fixed(4);
     
-}; //game_core.check_collision
+}, //game_core.check_collision
 
 
-game_core.prototype.process_input = function( player ) {
+process_input:  function( player ) {
 
     //It's possible to have recieved multiple inputs by now,
     //so we process each one
@@ -184,11 +187,11 @@ game_core.prototype.process_input = function( player ) {
         //give it back
     return resulting_vector;
 
-}; //game_core.process_input
+}, //game_core.process_input
 
 
 
-game_core.prototype.physics_movement_vector_from_direction = function(x,y) {
+physics_movement_vector_from_direction: function(x,y) {
 
         //Must be fixed step, at physics sync speed.
     return {
@@ -196,9 +199,9 @@ game_core.prototype.physics_movement_vector_from_direction = function(x,y) {
         y : (y * (this.playerspeed * 0.015)).fixed(3)
     };
 
-}; //game_core.physics_movement_vector_from_direction
+}, //game_core.physics_movement_vector_from_direction
 
-game_core.prototype.update_physics = function() {
+update_physics:  function() {
 
     if(this.server) {
         this.server_update_physics();
@@ -206,7 +209,7 @@ game_core.prototype.update_physics = function() {
         this.client_update_physics();
     }
 
-}; //game_core.prototype.update_physics
+}, //game_core.prototype.update_physics
 
 /*
 
@@ -218,7 +221,7 @@ game_core.prototype.update_physics = function() {
 */
 
     //Updated at 15ms , simulates the world state
-game_core.prototype.server_update_physics = function() {
+server_update_physics: function() {
 
         //Handle player one
     this.players.self.old_state.pos = this.pos( this.players.self.pos );
@@ -237,11 +240,11 @@ game_core.prototype.server_update_physics = function() {
     this.players.self.inputs = []; //we have cleared the input buffer, so remove this
     this.players.other.inputs = []; //we have cleared the input buffer, so remove this
 
-}; //game_core.server_update_physics
+}, //game_core.server_update_physics
 
     //Makes sure things run smoothly and notifies clients of changes
     //on the server side
-game_core.prototype.server_update = function(){
+server_update: function(){
 
         //Update the state of our local clock to match the timer
     this.server_time = this.local_time;
@@ -265,10 +268,10 @@ game_core.prototype.server_update = function(){
         this.players.other.instance.emit( 'onserverupdate', this.laststate );
     }
 
-}; //game_core.server_update
+}, //game_core.server_update
 
 
-game_core.prototype.handle_server_input = function(client, input, input_time, input_seq) {
+handle_server_input: function(client, input, input_time, input_seq) {
 
         //Fetch which client this refers to out of the two
     var player_client =
@@ -278,17 +281,17 @@ game_core.prototype.handle_server_input = function(client, input, input_time, in
         //Store the input on the player instance for processing in the physics loop
    player_client.inputs.push({inputs:input, time:input_time, seq:input_seq});
 
-}; //game_core.handle_server_input
+}, //game_core.handle_server_input
 
-game_core.prototype.create_timer = function(){
+create_timer: function(){
     setInterval(function(){
         this._dt = new Date().getTime() - this._dte;
         this._dte = new Date().getTime();
         this.local_time += this._dt/1000.0;
     }.bind(this), 4);
-}
+},
 
-game_core.prototype.create_physics_simulation = function() {
+create_physics_simulation: function() {
 
     setInterval(function(){
         this._pdt = (new Date().getTime() - this._pdte)/1000.0;
@@ -296,7 +299,9 @@ game_core.prototype.create_physics_simulation = function() {
         this.update_physics();
     }.bind(this), 15);
 
-}; //game_core.client_create_physics_simulation
+} //game_core.client_create_physics_simulation
+
+});
 
 
 /*
