@@ -97,10 +97,6 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
 
     }; //game_core.constructor
 
-//server side we set the 'game_core' class to a global type, so that it can use it anywhere.
-if( 'undefined' != typeof global ) {
-    module.exports = global.game_core = game_core;
-}
 
 /*
     Helper functions for the game code
@@ -117,6 +113,9 @@ game_core.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
     //Add a 2d vector with another one and return the resulting vector
 game_core.prototype.v_add = function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; };
     //Subtract a 2d vector with another one and return the resulting vector
+   //For the server, we need to cancel the setTimeout that the polyfill creates
+game_core.prototype.stop_update = function() {  window.cancelAnimationFrame( this.updateid );  };
+
 
 
 /*
@@ -412,3 +411,8 @@ game_core.prototype.create_physics_simulation = function() {
         game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
     
     }; //game_player.draw
+
+//server side we set the 'game_core' class to a global type, so that it can use it anywhere.
+if( 'undefined' != typeof global ) {
+    module.exports = global.game_core = game_core;
+}
