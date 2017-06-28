@@ -4,7 +4,7 @@
         A simple class to maintain state of a player on screen,
         as well as to draw that state when required.
 */
-var game_player = new Class(
+var ServerPlayer = new Class(
 {
 initialize: function( game_instance, player_instance ) 
 {
@@ -46,7 +46,7 @@ initialize: function( game_instance, player_instance )
             this.pos = { x:500, y:200 };
         }
 
-    }, //game_player.constructor
+    }, 
   
     draw: function(){
 
@@ -60,7 +60,7 @@ initialize: function( game_instance, player_instance )
         game.ctx.fillStyle = this.info_color;
         game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
     
-    } //game_player.draw
+    } 
 });
     
-module.exports = game_player;
+module.exports = ServerPlayer;

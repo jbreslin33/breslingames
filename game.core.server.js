@@ -1,4 +1,4 @@
-var game_player = require('./game.player');
+var ServerPlayer = require('./server.player');
 
 /* The game_core class */
 
@@ -22,8 +22,8 @@ initialize: function(game_instance)
         //the game that is running them, as well
 
             this.players = {
-                self : new game_player(this,this.instance.player_host),
-                other : new game_player(this,this.instance.player_client)
+                self : new ServerPlayer(this,this.instance.player_host),
+                other : new ServerPlayer(this,this.instance.player_client)
             };
 
            this.players.self.pos = {x:20,y:20};
@@ -90,7 +90,7 @@ update: function(t) {
 
 /*
     Shared between server and client.
-    In this example, `item` is always of type game_player.
+    In this example, `item` is always of type ServerPlayer.
 */
 check_collision: function( item ) {
 
