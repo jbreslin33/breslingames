@@ -1,4 +1,20 @@
+/*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
+    
+    written by : http://underscorediscovery.ca
+    written for : http://buildnewgames.com/real-time-multiplayer/
+    
+    MIT Licensed.
+*/
 
+//The main update loop runs on requestAnimationFrame,
+//Which falls back to a setTimeout loop on the server
+//Code below is from Three.js, and sourced from links below
+
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+
+    // requestAnimationFrame polyfill by Erik Möller
+    // fixes from Paul Irish and Tino Zijdel
 
 var frame_time = 60/1000; // run the local game at 16ms/ 60hz
 if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 22hz
@@ -183,69 +199,61 @@ game_core.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x,
         A simple class to maintain state of a player on screen,
         as well as to draw that state when required.
 */
-var game_player = new Class(
-{
-        initialize: function(game_instance, player_instance)
-        {
-                console.log('create player');
 
-                //Store the instance, if any
-                this.instance = player_instance;
-                this.game = game_instance;
+    var game_player = function( game_instance, player_instance ) {
 
-                //Set up initial values for our state information
-                this.pos = { x:0, y:0 };
-                this.size = { x:16, y:16, hx:8, hy:8 };
-                this.state = 'not-connected';
-                this.color = 'rgba(255,255,255,0.1)';
-                this.info_color = 'rgba(255,255,255,0.1)';
-                this.id = '';
+            //Store the instance, if any
+        this.instance = player_instance;
+        this.game = game_instance;
 
-                //These are used in moving us around later
-                this.old_state = {pos:{x:0,y:0}};
-                this.cur_state = {pos:{x:0,y:0}};
-                this.state_time = new Date().getTime();
+            //Set up initial values for our state information
+        this.pos = { x:0, y:0 };
+        this.size = { x:16, y:16, hx:8, hy:8 };
+        this.state = 'not-connected';
+        this.color = 'rgba(255,255,255,0.1)';
+        this.info_color = 'rgba(255,255,255,0.1)';
+        this.id = '';
 
-                //Our local history of inputs
-                this.inputs = [];
+            //These are used in moving us around later
+        this.old_state = {pos:{x:0,y:0}};
+        this.cur_state = {pos:{x:0,y:0}};
+        this.state_time = new Date().getTime();
 
-                //The world bounds we are confined to
-                this.pos_limits =
-                {
-                        x_min: this.size.hx,
-                        x_max: this.game.world.width - this.size.hx,
-                        y_min: this.size.hy,
-                        y_max: this.game.world.height - this.size.hy
-                };
+            //Our local history of inputs
+        this.inputs = [];
 
-                //The 'host' of a game gets created with a player instance since
-                //the server already knows who they are. If the server starts a game
-                //with only a host, the other player is set up in the 'else' below
-                if(player_instance)
-                {
-                        this.pos = { x:20, y:20 };
-                }
-                else
-                {
-                        this.pos = { x:500, y:200 };
-                }
-        },
+            //The world bounds we are confined to
+        this.pos_limits = {
+            x_min: this.size.hx,
+            x_max: this.game.world.width - this.size.hx,
+            y_min: this.size.hy,
+            y_max: this.game.world.height - this.size.hy
+        };
 
-        draw: function()
-        {
+            //The 'host' of a game gets created with a player instance since
+            //the server already knows who they are. If the server starts a game
+            //with only a host, the other player is set up in the 'else' below
+        if(player_instance) {
+            this.pos = { x:20, y:20 };
+        } else {
+            this.pos = { x:500, y:200 };
+        }
 
-                //Set the color for this player
-                game.ctx.fillStyle = this.color;
+    }; //game_player.constructor
+  
+    game_player.prototype.draw = function(){
 
-                //Draw a rectangle for us
-                game.ctx.fillRect(this.pos.x - this.size.hx, this.pos.y - this.size.hy, this.size.x, this.size.y);
+            //Set the color for this player
+        game.ctx.fillStyle = this.color;
 
-                //Draw a status update
-                game.ctx.fillStyle = this.info_color;
-                game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
-        } //game_player.draw
-});
+            //Draw a rectangle for us
+        game.ctx.fillRect(this.pos.x - this.size.hx, this.pos.y - this.size.hy, this.size.x, this.size.y);
 
+            //Draw a status update
+        game.ctx.fillStyle = this.info_color;
+        game.ctx.fillText(this.state, this.pos.x+10, this.pos.y + 4);
+    
+    }; //game_player.draw
 
 /*
 

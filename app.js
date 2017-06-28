@@ -1,13 +1,12 @@
+/*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
+    
+    written by : http://underscorediscovery.ca
+    written for : http://buildnewgames.com/real-time-multiplayer/
+    
+    MIT Licensed.
 
-require ('mootools');
-
-/*
-var Ball = require('./ball.js');
-
-ball = new Ball();
-var game_player = require('./game_player.js');
+    Usage : node app.js
 */
-
 
     var
         gameport        = process.env.PORT || 4004,
