@@ -35,7 +35,7 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
 
 }() );
 
-var game_core = require('./game.core.server');
+var ServerGame = require('./server.game');
 
 
     var
@@ -47,7 +47,7 @@ var game_core = require('./game.core.server');
         //are going to include some values to handle that.
 
         //Import shared game library code.
-    require('./game.core.server.js');
+    require('./server.game.js');
 
         //A simple wrapper for logging so we can toggle it,
         //and augment it for clarity.
@@ -147,7 +147,7 @@ var game_core = require('./game.core.server');
 
             //Create a new game core instance, this actually runs the
             //game code like collisions and such.
-        thegame.gamecore = new game_core( thegame );
+        thegame.gamecore = new ServerGame( thegame );
             //Start updating the game loop on the server
         thegame.gamecore.update( new Date().getTime() );
 

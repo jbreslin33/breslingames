@@ -1,8 +1,8 @@
 var ServerPlayer = require('./server.player');
 
-/* The game_core class */
+/* The ServerGame class */
 
-var game_core = new Class(
+var ServerGame = new Class(
 {
 initialize: function(game_instance)
 {
@@ -285,4 +285,4 @@ create_physics_simulation: function() {
 	// (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
 Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
 
-module.exports = game_core;
+module.exports = ServerGame;
