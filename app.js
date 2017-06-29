@@ -1,4 +1,6 @@
 require ('mootools');
+var Server = require('./server');
+
 
 /*  Copyright 2012-2016 Sven "underscorediscovery" Bergström
     
@@ -82,7 +84,7 @@ require ('mootools');
         //Enter the game server code. The game server handles
         //client connections looking for a game, creating games,
         //leaving games, joining games and ending games when they leave.
-    server = require('./server.js');
+    //server = require('./server.js');
 /**************
 ****************/
     global.window = global.document = global;
@@ -114,7 +116,10 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
     }
 
 }() );
-
+/****************
+create server
+****************/
+server = new Server();
 
         //Socket.io will call this function when a client connects,
         //So we can send that client looking for a game to play,

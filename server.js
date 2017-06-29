@@ -5,57 +5,55 @@
     
     MIT Licensed.
 */
-
 var ServerGame = require('./server.game');
+var ServerCore = require('./server.core');
 
+var Server = new Class(
+{
+initialize: function()
+{
+	this.games = new Array();
+	this.game_count = 0;
 
-    var
-        game_server = module.exports = { games : {}, game_count:0 },
-        UUID        = require('node-uuid'),
-        verbose     = true;
+        this.verbose     = true;
 
         //Since we are sharing code with the browser, we
         //are going to include some values to handle that.
 
         //A simple wrapper for logging so we can toggle it,
         //and augment it for clarity.
-    game_server.log = function() {
-        if(verbose) console.log.apply(this,arguments);
-    };
-
-    game_server.fake_latency = 0;
-    game_server.local_time = 0;
-    game_server._dt = new Date().getTime();
-    game_server._dte = new Date().getTime();
+    	this.fake_latency = 0;
+    	this.local_time = 0;
+    	this._dt = new Date().getTime();
+    	this._dte = new Date().getTime();
         //a local queue of messages we delay if faking latency
-    game_server.messages = [];
+    	this.messages = [];
+},
 
-    setInterval(function(){
-        game_server._dt = new Date().getTime() - game_server._dte;
-        game_server._dte = new Date().getTime();
-        game_server.local_time += game_server._dt/1000.0;
-    }, 4);
+    	log: function() {
+        if(this.verbose) console.log.apply(this,arguments);
+    },
 
-    game_server.onMessage = function(client,message) {
+    onMessage: function(client,message) {
 
         if(this.fake_latency && message.split('.')[0].substr(0,1) == 'i') {
 
                 //store all input message
-            game_server.messages.push({client:client, message:message});
+            this.messages.push({client:client, message:message});
 
             setTimeout(function(){
-                if(game_server.messages.length) {
-                    game_server._onMessage( game_server.messages[0].client, game_server.messages[0].message );
-                    game_server.messages.splice(0,1);
+                if(this.messages.length) {
+                    this._onMessage( this.messages[0].client, this.messages[0].message );
+                    this.messages.splice(0,1);
                 }
             }.bind(this), this.fake_latency);
 
         } else {
-            game_server._onMessage(client, message);
+            this._onMessage(client, message);
         }
-    };
+    },
     
-    game_server._onMessage = function(client,message) {
+    _onMessage: function(client,message) {
 
             //Cut the message up into sub components
         var message_parts = message.split('.');
@@ -78,9 +76,9 @@ var ServerGame = require('./server.game');
             this.fake_latency = parseFloat(message_parts[1]);
         }
 
-    }; 
+    },
 
-    game_server.onInput = function(client, parts) {
+    onInput: function(client, parts) {
             //The input commands come in like u-l,
             //so we split them up into separate commands,
             //and then update the players
@@ -94,18 +92,13 @@ var ServerGame = require('./server.game');
             client.game.gamecore.handle_server_input(client, input_commands, input_time, input_seq);
         }
 
-    }; 
+    },
 
         //Define some required functions
-    game_server.createGame = function(player) {
+    createGame: function(player) {
 
             //Create a new game instance
-        var thegame = {
-                id : UUID(),                //generate a new id for the game
-                player_host:player,         //so we know who initiated the game
-                player_client:null,         //nobody else joined yet, since its new
-                player_count:1              //for simple checking of state
-            };
+	var thegame = new ServerGame(player);
 
             //Store it in the list of game
         this.games[ thegame.id ] = thegame;
@@ -115,7 +108,7 @@ var ServerGame = require('./server.game');
 
             //Create a new game core instance, this actually runs the
             //game code like collisions and such.
-        thegame.gamecore = new ServerGame( thegame );
+        thegame.gamecore = new ServerCore( thegame );
             //Start updating the game loop on the server
         thegame.gamecore.update( new Date().getTime() );
 
@@ -132,10 +125,10 @@ var ServerGame = require('./server.game');
             //return it
         return thegame;
 
-    }; 
+    }, 
 
         //we are requesting to kill a game in progress.
-    game_server.endGame = function(gameid, userid) {
+    endGame: function(gameid, userid) {
 
         var thegame = this.games[gameid];
 
@@ -180,9 +173,9 @@ var ServerGame = require('./server.game');
             this.log('that game was not found!');
         }
 
-    }; 
+    },
 
-    game_server.startGame = function(game) {
+    startGame: function(game) {
 
             //right so a game has 2 players and wants to begin
             //the host already knows they are hosting,
@@ -199,9 +192,9 @@ var ServerGame = require('./server.game');
             //set this flag, so that the update loop can run it.
         game.active = true;
 
-    }; 
+    },
 
-    game_server.findGame = function(player) {
+    findGame: function(player) {
 
         this.log('looking for a game. We have : ' + this.game_count);
 
@@ -250,6 +243,15 @@ var ServerGame = require('./server.game');
             this.createGame(player);
         }
 
-    }; 
+    } 
+});
 
+/*
+    setInterval(function(){
+        game_server._dt = new Date().getTime() - game_server._dte;
+        game_server._dte = new Date().getTime();
+        game_server.local_time += game_server._dt/1000.0;
+    }, 4);
+*/
+module.exports = Server;
 
