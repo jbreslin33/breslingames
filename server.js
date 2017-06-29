@@ -78,7 +78,7 @@ var ServerGame = require('./server.game');
             this.fake_latency = parseFloat(message_parts[1]);
         }
 
-    }; //game_server.onMessage
+    }; 
 
     game_server.onInput = function(client, parts) {
             //The input commands come in like u-l,
@@ -94,7 +94,7 @@ var ServerGame = require('./server.game');
             client.game.gamecore.handle_server_input(client, input_commands, input_time, input_seq);
         }
 
-    }; //game_server.onInput
+    }; 
 
         //Define some required functions
     game_server.createGame = function(player) {
@@ -132,7 +132,7 @@ var ServerGame = require('./server.game');
             //return it
         return thegame;
 
-    }; //game_server.createGame
+    }; 
 
         //we are requesting to kill a game in progress.
     game_server.endGame = function(gameid, userid) {
@@ -180,7 +180,7 @@ var ServerGame = require('./server.game');
             this.log('that game was not found!');
         }
 
-    }; //game_server.endGame
+    }; 
 
     game_server.startGame = function(game) {
 
@@ -199,7 +199,7 @@ var ServerGame = require('./server.game');
             //set this flag, so that the update loop can run it.
         game.active = true;
 
-    }; //game_server.startGame
+    }; 
 
     game_server.findGame = function(player) {
 
@@ -250,6 +250,6 @@ var ServerGame = require('./server.game');
             this.createGame(player);
         }
 
-    }; //game_server.findGame
+    }; 
 
 
