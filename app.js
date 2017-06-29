@@ -1,17 +1,14 @@
 require ('mootools');
 var Server = require('./server');
     
-var
-        gameport        = process.env.PORT || 4004,
-
-        io              = require('socket.io'),
-        express         = require('express'),
-        UUID            = require('node-uuid'),
-
-        verbose         = false,
-        http            = require('http'),
-        app             = express(),
-        server          = http.createServer(app);
+var gameport = process.env.PORT || 4004;
+var io       = require('socket.io');
+var express  = require('express');
+var UUID     = require('node-uuid');
+var verbose  = false;
+var http     = require('http');
+var app      = express();
+var server   = http.createServer(app);
 
 /* Express server set up. */
 
@@ -32,7 +29,6 @@ app.get( '/', function( req, res )
 	console.log('trying to load %s', __dirname + '/index.html');
         res.sendfile( '/index.html' , { root:__dirname });
 });
-
 
 //This handler will listen for requests on /*, any file from the root of our server.
 //See expressjs documentation for more info on routing.
