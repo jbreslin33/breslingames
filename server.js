@@ -194,56 +194,57 @@ initialize: function()
 
     },
 
-    findGame: function(player) {
+ findGame: function(player) 
+{
+	this.log('looking for a game. We have : ' + this.game_count);
 
-        this.log('looking for a game. We have : ' + this.game_count);
-
-            //so there are games active,
-            //lets see if one needs another player
-        if(this.game_count) {
-                
-            var joined_a_game = false;
+        //so there are games active,
+        //lets see if one needs another player
+        if(this.game_count) 
+	{
+        	var joined_a_game = false;
 
                 //Check the list of games for an open game
-            for(var gameid in this.games) {
-                    //only care about our own properties.
-                if(!this.games.hasOwnProperty(gameid)) continue;
-                    //get the game we are checking against
-                var game_instance = this.games[gameid];
+            	for(var gameid in this.games) 
+		{
+                	//only care about our own properties.
+                	if (!this.games.hasOwnProperty(gameid)) 
+			{
+				continue;
+			}
+                    	//get the game we are checking against
+                	var game_instance = this.games[gameid];
 
-                    //If the game is a player short
-                if(game_instance.player_count < 2) {
+                    	//If the game is a player short
+                	if (game_instance.player_count < 2) 
+			{
+                        	//someone wants us to join!
+                    		joined_a_game = true;
+                        	//increase the player count and store
+                        	//the player as the client of this game
+                    		game_instance.player_client = player;
+                    		game_instance.gamecore.players.other.instance = player;
+                    		game_instance.player_count++;
 
-                        //someone wants us to join!
-                    joined_a_game = true;
-                        //increase the player count and store
-                        //the player as the client of this game
-                    game_instance.player_client = player;
-                    game_instance.gamecore.players.other.instance = player;
-                    game_instance.player_count++;
-
-                        //start running the game on the server,
-                        //which will tell them to respawn/start
-                    this.startGame(game_instance);
-
-                } //if less than 2 players
-            } //for all games
+                        	//start running the game on the server,
+                        	//which will tell them to respawn/start
+                    		this.startGame(game_instance);
+                	} //if less than 2 players
+            	} //for all games
 
                 //now if we didn't join a game,
                 //we must create one
-            if(!joined_a_game) {
-
-                this.createGame(player);
-
-            } //if no join already
-
-        } else { //if there are any games at all
-
-                //no games? create one!
-            this.createGame(player);
+            	if(!joined_a_game) 
+		{
+                	this.createGame(player);
+            	} //if no join already
+	} 
+	else 
+	{ //if there are any games at all
+       		//no games? create one!
+            	this.createGame(player);
         }
-
-    } 
+} 
 });
 
 /*
