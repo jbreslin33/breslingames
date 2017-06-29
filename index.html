@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html>
 	<head>
-
 		<title> Real time multi-player games with HTML5</title>
-
-
-
-			<!-- Load style sheet -->
+		<!-- Load style sheet -->
 		<link href="index.css" media="screen" rel="stylesheet" type="text/css">
 
-	<!-- Library code -->
+		<!-- Library code -->
 	
+		<!-- Moo tools so we can more easily use oo techniques -->
 		<script type="text/javascript" src="/mootools-core-1.5.1-full-compat-yc.js"></script>
 		
-		 	<!-- Load socket.io client side contents. -->
+	 	<!-- Load socket.io client side contents. -->
 		<script src="/socket.io/socket.io.js"></script>
 
-
-	 		<!-- Load the GUI rendering library code. -->
+		<!-- Load the GUI rendering library code. -->
 		<script type="text/javascript" src="lib/dat.gui.min.js"></script>
-			<!-- Load the keyboard specific code --> 
+
+		<!-- Load the keyboard specific code --> 
 		<script type="text/javascript" src="lib/keyboard.js"></script>
 	 	
-	<!-- Game code -->
+		<!-- Game code -->
 
-	 		<!-- Load the common game code. -->
-		<script type="text/javascript" src="game.core.client.js"></script>
-			<!-- Finally, Load the game client code. -->
+ 		<!-- Load the common game code. -->
+		<script type="text/javascript" src="client.core.js"></script>
+
+		<!-- Finally, Load the game client code. -->
 		<script type="text/javascript" src="client.js"></script>		
-			
-
 	</head>
 
 	<body>
 		<canvas id="viewport">
 		</canvas>
 	</body>
-
 </html>

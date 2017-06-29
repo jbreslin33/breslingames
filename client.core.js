@@ -49,9 +49,9 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
         //each game that is hosted, and client creates one
         //for itself to play the game.
 
-/* The game_core class */
+/* The ClientCore class */
 
-    var game_core = function(game_instance){
+    var ClientCore = function(game_instance){
 
             //Store the instance, if any
         this.instance = game_instance;
@@ -161,11 +161,11 @@ if('undefined' != typeof(global)) frame_time = 45; //on server we run at 45ms, 2
 
         }
 
-    }; //game_core.constructor
+    }; //ClientCore.constructor
 
-//server side we set the 'game_core' class to a global type, so that it can use it anywhere.
+//server side we set the 'ClientCore' class to a global type, so that it can use it anywhere.
 if( 'undefined' != typeof global ) {
-    module.exports = global.game_core = game_core;
+    module.exports = global.ClientCore = ClientCore;
 }
 
 /*
@@ -179,19 +179,19 @@ if( 'undefined' != typeof global ) {
     // (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
 Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
     //copies a 2d vector like object from one to another
-game_core.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
+ClientCore.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
     //Add a 2d vector with another one and return the resulting vector
-game_core.prototype.v_add = function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; };
+ClientCore.prototype.v_add = function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; };
     //Subtract a 2d vector with another one and return the resulting vector
-game_core.prototype.v_sub = function(a,b) { return { x:(a.x-b.x).fixed(),y:(a.y-b.y).fixed() }; };
+ClientCore.prototype.v_sub = function(a,b) { return { x:(a.x-b.x).fixed(),y:(a.y-b.y).fixed() }; };
     //Multiply a 2d vector with a scalar value and return the resulting vector
-game_core.prototype.v_mul_scalar = function(a,b) { return {x: (a.x*b).fixed() , y:(a.y*b).fixed() }; };
+ClientCore.prototype.v_mul_scalar = function(a,b) { return {x: (a.x*b).fixed() , y:(a.y*b).fixed() }; };
     //For the server, we need to cancel the setTimeout that the polyfill creates
-game_core.prototype.stop_update = function() {  window.cancelAnimationFrame( this.updateid );  };
+ClientCore.prototype.stop_update = function() {  window.cancelAnimationFrame( this.updateid );  };
     //Simple linear interpolation
-game_core.prototype.lerp = function(p, n, t) { var _t = Number(t); _t = (Math.max(0, Math.min(1, _t))).fixed(); return (p + _t * (n - p)).fixed(); };
+ClientCore.prototype.lerp = function(p, n, t) { var _t = Number(t); _t = (Math.max(0, Math.min(1, _t))).fixed(); return (p + _t * (n - p)).fixed(); };
     //Simple linear interpolation between 2 vectors
-game_core.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y, tv.y, t) }; };
+ClientCore.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y, tv.y, t) }; };
 
 
 /*
@@ -205,7 +205,7 @@ game_core.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x,
 */
 
     //Main update loop
-game_core.prototype.update = function(t) {
+ClientCore.prototype.update = function(t) {
     
         //Work out the delta time
     this.dt = this.lastframetime ? ( (t - this.lastframetime)/1000.0).fixed() : 0.016;
@@ -223,14 +223,14 @@ game_core.prototype.update = function(t) {
         //schedule the next update
     this.updateid = window.requestAnimationFrame( this.update.bind(this), this.viewport );
 
-}; //game_core.update
+}; //ClientCore.update
 
 
 /*
     Shared between server and client.
     In this example, `item` is always of type game_player.
 */
-game_core.prototype.check_collision = function( item ) {
+ClientCore.prototype.check_collision = function( item ) {
 
         //Left wall.
     if(item.pos.x <= item.pos_limits.x_min) {
@@ -256,10 +256,10 @@ game_core.prototype.check_collision = function( item ) {
     item.pos.x = item.pos.x.fixed(4);
     item.pos.y = item.pos.y.fixed(4);
     
-}; //game_core.check_collision
+}; //ClientCore.check_collision
 
 
-game_core.prototype.process_input = function( player ) {
+ClientCore.prototype.process_input = function( player ) {
 
     //It's possible to have recieved multiple inputs by now,
     //so we process each one
@@ -304,11 +304,11 @@ game_core.prototype.process_input = function( player ) {
         //give it back
     return resulting_vector;
 
-}; //game_core.process_input
+}; //ClientCore.process_input
 
 
 
-game_core.prototype.physics_movement_vector_from_direction = function(x,y) {
+ClientCore.prototype.physics_movement_vector_from_direction = function(x,y) {
 
         //Must be fixed step, at physics sync speed.
     return {
@@ -316,9 +316,9 @@ game_core.prototype.physics_movement_vector_from_direction = function(x,y) {
         y : (y * (this.playerspeed * 0.015)).fixed(3)
     };
 
-}; //game_core.physics_movement_vector_from_direction
+}; //ClientCore.physics_movement_vector_from_direction
 
-game_core.prototype.update_physics = function() {
+ClientCore.prototype.update_physics = function() {
 
     if(this.server) {
         this.server_update_physics();
@@ -326,7 +326,7 @@ game_core.prototype.update_physics = function() {
         this.client_update_physics();
     }
 
-}; //game_core.prototype.update_physics
+}; //ClientCore.prototype.update_physics
 
 /*
 
@@ -337,7 +337,7 @@ game_core.prototype.update_physics = function() {
 
 */
 
-game_core.prototype.client_handle_input = function(){
+ClientCore.prototype.client_handle_input = function(){
 
     //if(this.lit > this.local_time) return;
     //this.lit = this.local_time+0.5; //one second delay
@@ -414,9 +414,9 @@ game_core.prototype.client_handle_input = function(){
 
     }
 
-}; //game_core.client_handle_input
+}; //ClientCore.client_handle_input
 
-game_core.prototype.client_process_net_prediction_correction = function() {
+ClientCore.prototype.client_process_net_prediction_correction = function() {
 
         //No updates...
     if(!this.server_updates.length) return;
@@ -465,9 +465,9 @@ game_core.prototype.client_process_net_prediction_correction = function() {
             } // if(lastinputseq_index != -1)
         } //if my_last_input_on_server
 
-}; //game_core.client_process_net_prediction_correction
+}; //ClientCore.client_process_net_prediction_correction
 
-game_core.prototype.client_process_net_updates = function() {
+ClientCore.prototype.client_process_net_updates = function() {
 
         //No updates...
     if(!this.server_updates.length) return;
@@ -573,9 +573,9 @@ game_core.prototype.client_process_net_updates = function() {
 
     } //if target && previous
 
-}; //game_core.client_process_net_updates
+}; //ClientCore.client_process_net_updates
 
-game_core.prototype.client_onserverupdate_recieved = function(data){
+ClientCore.prototype.client_onserverupdate_recieved = function(data){
 
             //Lets clarify the information we have locally. One of the players is 'hosting' and
             //the other is a joined in client, so we name these host and client for making sure
@@ -631,9 +631,9 @@ game_core.prototype.client_onserverupdate_recieved = function(data){
             
         } //non naive
 
-}; //game_core.client_onserverupdate_recieved
+}; //ClientCore.client_onserverupdate_recieved
 
-game_core.prototype.client_update_local_position = function(){
+ClientCore.prototype.client_update_local_position = function(){
 
  if(this.client_predict) {
 
@@ -653,9 +653,9 @@ game_core.prototype.client_update_local_position = function(){
 
     }  //if(this.client_predict)
 
-}; //game_core.prototype.client_update_local_position
+}; //ClientCore.prototype.client_update_local_position
 
-game_core.prototype.client_update_physics = function() {
+ClientCore.prototype.client_update_physics = function() {
 
         //Fetch the new direction from the input buffer,
         //and apply it to the state so we can smooth it in the visual state
@@ -669,9 +669,9 @@ game_core.prototype.client_update_physics = function() {
 
     }
 
-}; //game_core.client_update_physics
+}; //ClientCore.client_update_physics
 
-game_core.prototype.client_update = function() {
+ClientCore.prototype.client_update = function() {
 
         //Clear the screen area
     this.ctx.clearRect(0,0,720,480);
@@ -714,9 +714,9 @@ game_core.prototype.client_update = function() {
         //Work out the fps average
     this.client_refresh_fps();
 
-}; //game_core.update_client
+}; //ClientCore.update_client
 
-game_core.prototype.create_timer = function(){
+ClientCore.prototype.create_timer = function(){
     setInterval(function(){
         this._dt = new Date().getTime() - this._dte;
         this._dte = new Date().getTime();
@@ -724,7 +724,7 @@ game_core.prototype.create_timer = function(){
     }.bind(this), 4);
 }
 
-game_core.prototype.create_physics_simulation = function() {
+ClientCore.prototype.create_physics_simulation = function() {
 
     setInterval(function(){
         this._pdt = (new Date().getTime() - this._pdte)/1000.0;
@@ -732,10 +732,10 @@ game_core.prototype.create_physics_simulation = function() {
         this.update_physics();
     }.bind(this), 15);
 
-}; //game_core.client_create_physics_simulation
+}; //ClientCore.client_create_physics_simulation
 
 
-game_core.prototype.client_create_ping_timer = function() {
+ClientCore.prototype.client_create_ping_timer = function() {
 
         //Set a ping timer to 1 second, to maintain the ping/latency between
         //client and server and calculated roughly how our connection is doing
@@ -747,10 +747,10 @@ game_core.prototype.client_create_ping_timer = function() {
 
     }.bind(this), 1000);
     
-}; //game_core.client_create_ping_timer
+}; //ClientCore.client_create_ping_timer
 
 
-game_core.prototype.client_create_configuration = function() {
+ClientCore.prototype.client_create_configuration = function() {
 
     this.show_help = false;             //Whether or not to draw the help text
     this.naive_approach = false;        //Whether or not to use the naive approach
@@ -784,9 +784,9 @@ game_core.prototype.client_create_configuration = function() {
     this.lit = 0;
     this.llt = new Date().getTime();
 
-};//game_core.client_create_configuration
+};//ClientCore.client_create_configuration
 
-game_core.prototype.client_create_debug_gui = function() {
+ClientCore.prototype.client_create_debug_gui = function() {
 
     this.gui = new dat.GUI();
 
@@ -842,9 +842,9 @@ game_core.prototype.client_create_debug_gui = function() {
 
         _netsettings.open();
 
-}; //game_core.client_create_debug_gui
+}; //ClientCore.client_create_debug_gui
 
-game_core.prototype.client_reset_positions = function() {
+ClientCore.prototype.client_reset_positions = function() {
 
     var player_host = this.players.self.host ?  this.players.self : this.players.other;
     var player_client = this.players.self.host ?  this.players.other : this.players.self;
@@ -864,9 +864,9 @@ game_core.prototype.client_reset_positions = function() {
     this.ghosts.server_pos_other.pos = this.pos(this.players.other.pos);
     this.ghosts.pos_other.pos = this.pos(this.players.other.pos);
 
-}; //game_core.client_reset_positions
+}; //ClientCore.client_reset_positions
 
-game_core.prototype.client_onreadygame = function(data) {
+ClientCore.prototype.client_onreadygame = function(data) {
 
     var server_time = parseFloat(data.replace('-','.'));
 
@@ -891,7 +891,7 @@ game_core.prototype.client_onreadygame = function(data) {
 
 }; //client_onreadygame
 
-game_core.prototype.client_onjoingame = function(data) {
+ClientCore.prototype.client_onjoingame = function(data) {
 
         //We are not the host
     this.players.self.host = false;
@@ -904,7 +904,7 @@ game_core.prototype.client_onjoingame = function(data) {
 
 }; //client_onjoingame
 
-game_core.prototype.client_onhostgame = function(data) {
+ClientCore.prototype.client_onhostgame = function(data) {
 
         //The server sends the time when asking us to host, but it should be a new game.
         //so the value will be really small anyway (15 or 16ms)
@@ -925,7 +925,7 @@ game_core.prototype.client_onhostgame = function(data) {
 
 }; //client_onhostgame
 
-game_core.prototype.client_onconnected = function(data) {
+ClientCore.prototype.client_onconnected = function(data) {
 
         //The server responded that we are now in a game,
         //this lets us store the information about ourselves and set the colors
@@ -937,20 +937,20 @@ game_core.prototype.client_onconnected = function(data) {
 
 }; //client_onconnected
 
-game_core.prototype.client_on_otherclientcolorchange = function(data) {
+ClientCore.prototype.client_on_otherclientcolorchange = function(data) {
 
     this.players.other.color = data;
 
-}; //game_core.client_on_otherclientcolorchange
+}; //ClientCore.client_on_otherclientcolorchange
 
-game_core.prototype.client_onping = function(data) {
+ClientCore.prototype.client_onping = function(data) {
 
     this.net_ping = new Date().getTime() - parseFloat( data );
     this.net_latency = this.net_ping/2;
 
 }; //client_onping
 
-game_core.prototype.client_onnetmessage = function(data) {
+ClientCore.prototype.client_onnetmessage = function(data) {
 
     var commands = data.split('.');
     var command = commands[0];
@@ -987,7 +987,7 @@ game_core.prototype.client_onnetmessage = function(data) {
                 
 }; //client_onnetmessage
 
-game_core.prototype.client_ondisconnect = function(data) {
+ClientCore.prototype.client_ondisconnect = function(data) {
     
         //When we disconnect, we don't know if the other player is
         //connected or not, and since we aren't, everything goes to offline
@@ -1001,7 +1001,7 @@ game_core.prototype.client_ondisconnect = function(data) {
 
 }; //client_ondisconnect
 
-game_core.prototype.client_connect_to_server = function() {
+ClientCore.prototype.client_connect_to_server = function() {
         
             //Store a local reference to our connection to the server
         this.socket = io.connect();
@@ -1023,10 +1023,10 @@ game_core.prototype.client_connect_to_server = function() {
             //On message from the server, we parse the commands and send it to the handlers
         this.socket.on('message', this.client_onnetmessage.bind(this));
 
-}; //game_core.client_connect_to_server
+}; //ClientCore.client_connect_to_server
 
 
-game_core.prototype.client_refresh_fps = function() {
+ClientCore.prototype.client_refresh_fps = function() {
 
         //We store the fps for 10 frames, by adding it to this accumulator
     this.fps = 1/this.dt;
@@ -1042,10 +1042,10 @@ game_core.prototype.client_refresh_fps = function() {
 
     } //reached 10 frames
 
-}; //game_core.client_refresh_fps
+}; //ClientCore.client_refresh_fps
 
 
-game_core.prototype.client_draw_info = function() {
+ClientCore.prototype.client_draw_info = function() {
 
         //We don't want this to be too distracting
     this.ctx.fillStyle = 'rgba(255,255,255,0.3)';
@@ -1076,7 +1076,7 @@ game_core.prototype.client_draw_info = function() {
         //Reset the style back to full white.
     this.ctx.fillStyle = 'rgba(255,255,255,1)';
 
-}; //game_core.client_draw_help
+}; //ClientCore.client_draw_help
 
 /*
     The player class
