@@ -277,14 +277,13 @@ process_input: function( player )
     	return resulting_vector;
 },
 
-physics_movement_vector_from_direction: function(x,y) {
-
-        //Must be fixed step, at physics sync speed.
+physics_movement_vector_from_direction: function(x,y) 
+{
+	//Must be fixed step, at physics sync speed.
     return {
         x : (x * (this.playerspeed * 0.015)).fixed(3),
         y : (y * (this.playerspeed * 0.015)).fixed(3)
     };
-
 },
 
 update_physics: function() {
