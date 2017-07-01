@@ -109,8 +109,6 @@ initialize: function()
 	}
 },
 
-//server side we set the 'ClientCore' class to a global type, so that it can use it anywhere.
-
 /*
     Helper functions for the game code
 
@@ -119,20 +117,47 @@ initialize: function()
 
 */
 
-    //copies a 2d vector like object from one to another
-pos: function(a) { return {x:a.x,y:a.y}; },
-    //Add a 2d vector with another one and return the resulting vector
-v_add: function(a,b) { return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; },
-    //Subtract a 2d vector with another one and return the resulting vector
-v_sub: function(a,b) { return { x:(a.x-b.x).fixed(),y:(a.y-b.y).fixed() }; },
-    //Multiply a 2d vector with a scalar value and return the resulting vector
-v_mul_scalar: function(a,b) { return {x: (a.x*b).fixed() , y:(a.y*b).fixed() }; },
-    //For the server, we need to cancel the setTimeout that the polyfill creates
-stop_update: function() {  window.cancelAnimationFrame( this.updateid );  },
-    //Simple linear interpolation
-lerp: function(p, n, t) { var _t = Number(t); _t = (Math.max(0, Math.min(1, _t))).fixed(); return (p + _t * (n - p)).fixed(); },
-    //Simple linear interpolation between 2 vectors
-v_lerp: function(v,tv,t) { return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y, tv.y, t) }; },
+//copies a 2d vector like object from one to another
+pos: function(a) 
+{ 
+	return {x:a.x,y:a.y}; 
+},
+
+//Add a 2d vector with another one and return the resulting vector
+v_add: function(a,b) 
+{ 
+	return { x:(a.x+b.x).fixed(), y:(a.y+b.y).fixed() }; 
+},
+
+//Subtract a 2d vector with another one and return the resulting vector
+v_sub: function(a,b) 
+{ 
+	return { x:(a.x-b.x).fixed(),y:(a.y-b.y).fixed() }; 
+},
+
+//Multiply a 2d vector with a scalar value and return the resulting vector
+v_mul_scalar: function(a,b) 
+{ 
+	return {x: (a.x*b).fixed() , y:(a.y*b).fixed() }; 
+},
+    
+//For the server, we need to cancel the setTimeout that the polyfill creates
+stop_update: function() 
+{  
+	window.cancelAnimationFrame( this.updateid );  
+},
+
+//Simple linear interpolation
+lerp: function(p, n, t) 
+{ 
+	var _t = Number(t); _t = (Math.max(0, Math.min(1, _t))).fixed(); return (p + _t * (n - p)).fixed(); 
+},
+
+//Simple linear interpolation between 2 vectors
+v_lerp: function(v,tv,t) 
+{ 
+	return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y, tv.y, t) }; 
+},
 
 /*
 
@@ -145,8 +170,8 @@ v_lerp: function(v,tv,t) { return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y,
 */
 
     //Main update loop
-update: function(t) {
-    
+update: function(t) 
+{
         //Work out the delta time
     	this.dt = this.lastframetime ? ( (t - this.lastframetime)/1000.0).fixed() : 0.016;
 
@@ -165,37 +190,39 @@ update: function(t) {
     Shared between server and client.
     In this example, `item` is always of type game_player.
 */
-check_collision: function( item ) {
-
-        //Left wall.
-    if(item.pos.x <= item.pos_limits.x_min) {
-        item.pos.x = item.pos_limits.x_min;
-    }
+check_collision: function( item ) 
+{
+	//Left wall.
+    	if(item.pos.x <= item.pos_limits.x_min) 
+	{
+        	item.pos.x = item.pos_limits.x_min;
+    	}
 
         //Right wall
-    if(item.pos.x >= item.pos_limits.x_max ) {
-        item.pos.x = item.pos_limits.x_max;
-    }
+    	if(item.pos.x >= item.pos_limits.x_max ) 
+	{
+        	item.pos.x = item.pos_limits.x_max;
+    	}
     
         //Roof wall.
-    if(item.pos.y <= item.pos_limits.y_min) {
-        item.pos.y = item.pos_limits.y_min;
-    }
+    	if(item.pos.y <= item.pos_limits.y_min) 
+	{
+        	item.pos.y = item.pos_limits.y_min;
+    	}
 
         //Floor wall
-    if(item.pos.y >= item.pos_limits.y_max ) {
-        item.pos.y = item.pos_limits.y_max;
-    }
+    	if(item.pos.y >= item.pos_limits.y_max ) 
+	{
+        	item.pos.y = item.pos_limits.y_max;
+    	}
 
         //Fixed point helps be more deterministic
-    item.pos.x = item.pos.x.fixed(4);
-    item.pos.y = item.pos.y.fixed(4);
-    
+    	item.pos.x = item.pos.x.fixed(4);
+    	item.pos.y = item.pos.y.fixed(4);
 }, 
 
-
-process_input: function( player ) {
-
+process_input: function( player ) 
+{
     //It's possible to have recieved multiple inputs by now,
     //so we process each one
     var x_dir = 0;
