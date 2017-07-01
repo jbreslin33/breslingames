@@ -118,8 +118,6 @@ var ClientCore = function(){
 
 */
 
-    // (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
-Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
     //copies a 2d vector like object from one to another
 ClientCore.prototype.pos = function(a) { return {x:a.x,y:a.y}; };
     //Add a 2d vector with another one and return the resulting vector
@@ -1009,3 +1007,5 @@ ClientCore.prototype.client_draw_info = function() {
 
 }; //ClientCore.client_draw_help
 
+// (4.22208334636).fixed(n) will return fixed point value to n places, default n = 3
+Number.prototype.fixed = function(n) { n = n || 3; return parseFloat(this.toFixed(n)); };
