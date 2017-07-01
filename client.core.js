@@ -109,11 +109,6 @@ var ClientCore = function(){
 };
 
 //server side we set the 'ClientCore' class to a global type, so that it can use it anywhere.
-/*
-if( 'undefined' != typeof global ) {
-    module.exports = global.ClientCore = ClientCore;
-}
-*/
 
 /*
     Helper functions for the game code
@@ -155,22 +150,17 @@ ClientCore.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x
 ClientCore.prototype.update = function(t) {
     
         //Work out the delta time
-    this.dt = this.lastframetime ? ( (t - this.lastframetime)/1000.0).fixed() : 0.016;
+    	this.dt = this.lastframetime ? ( (t - this.lastframetime)/1000.0).fixed() : 0.016;
 
         //Store the last frame time
-    this.lastframetime = t;
+    	this.lastframetime = t;
 
         //Update the game specifics
-    if(!this.server) {
-        this.client_update();
-    } else {
-        this.server_update();
-    }
+	this.client_update();
 
         //schedule the next update
-    this.updateid = window.requestAnimationFrame( this.update.bind(this), this.viewport );
-
-}; //ClientCore.update
+    	this.updateid = window.requestAnimationFrame( this.update.bind(this), this.viewport );
+}; 
 
 
 /*
@@ -266,13 +256,7 @@ ClientCore.prototype.physics_movement_vector_from_direction = function(x,y) {
 }; //ClientCore.physics_movement_vector_from_direction
 
 ClientCore.prototype.update_physics = function() {
-
-    if(this.server) {
-        this.server_update_physics();
-    } else {
-        this.client_update_physics();
-    }
-
+	this.client_update_physics();
 }; //ClientCore.prototype.update_physics
 
 /*
