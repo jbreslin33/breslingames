@@ -63,4 +63,3 @@ initialize: function( game_instance, player_instance )
     } 
 });
     
-module.exports = ClientPlayer;
