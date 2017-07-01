@@ -39,6 +39,7 @@ window.onload = function()
 	}());
 
 	//Create our game client instance.
+	testClass = new TestClass();
 	game = new ClientCore();
 
 	//Fetch the viewport
