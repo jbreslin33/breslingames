@@ -109,10 +109,11 @@ var ClientCore = function(){
 };
 
 //server side we set the 'ClientCore' class to a global type, so that it can use it anywhere.
-
+/*
 if( 'undefined' != typeof global ) {
     module.exports = global.ClientCore = ClientCore;
 }
+*/
 
 /*
     Helper functions for the game code
